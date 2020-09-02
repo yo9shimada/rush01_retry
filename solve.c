@@ -6,7 +6,7 @@
 /*   By: yshimada <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/28 13:41:21 by yshimada          #+#    #+#             */
-/*   Updated: 2020/09/01 15:21:49 by yshimada         ###   ########.fr       */
+/*   Updated: 2020/09/02 11:31:42 by yshimada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,12 @@ void	ft_putchar(char c)
 	write(1, &c, 1);
 }
 
-void	init(char map[4][4])
+void	print_map_error(void)
+{
+	write(1, "map error!\n", 1);
+}
+
+void	init(char (*map)[4])
 {
 	int i;
 
@@ -29,7 +34,7 @@ void	init(char map[4][4])
 	}
 }
 
-void	show(char map[4][4])
+void	show(char (*map)[4])
 {
 	int i;
 
@@ -45,9 +50,16 @@ void	show(char map[4][4])
 
 void	solve(int *views)
 {
-	char map[4][4];
+	char (*map)[4];
 
-	*views = 0;
+	map = malloc(sizeof(char) * 4 * 4);
 	init(map);
 	show(map);
+	if ((map = create_map(map, views, 0)))
+	{
+		print_map_error();
+		return ;
+	}
+	show(map);
+	free(map);
 }
