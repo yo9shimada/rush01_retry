@@ -6,7 +6,7 @@
 /*   By: yshimada <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/28 13:41:21 by yshimada          #+#    #+#             */
-/*   Updated: 2020/09/02 11:31:42 by yshimada         ###   ########.fr       */
+/*   Updated: 2020/09/02 13:05:57 by yshimada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	solve(int *views)
 	map = malloc(sizeof(char) * 4 * 4);
 	init(map);
 	show(map);
-	if ((map = create_map(map, views, 0)))
+	if (create_map(map, views, 0))
 	{
 		print_map_error();
 		return ;

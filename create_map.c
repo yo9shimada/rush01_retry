@@ -6,46 +6,55 @@
 /*   By: yshimada <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 09:56:00 by yshimada          #+#    #+#             */
-/*   Updated: 2020/09/02 11:31:28 by yshimada         ###   ########.fr       */
+/*   Updated: 2020/09/02 15:27:17 by yshimada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rush01.h"
 
-void	map_copy(char (*map)[4], char (*temp_map)[4])
+int		same_num(char (*map)[4], int pos, int el)
 {
 	int i;
 
 	i = 0;
-	while (i < 16)
+	while (i < 4)
 	{
-		temp_map[i / 4][i % 4] = map[i / 4][i % 4];
+		if (map[pos / 4][i] == el && i != pos % 4)
+			return (0);
 		i++;
 	}
+	return (1);
 }
 
-char	*create_map(char (*map)[4], int *views, int pos)
+int		y_visible_num(views, pos, 1)
+
+int		view_cmp(char (*map)[4], int *views, int pos)
 {
-	char (*temp_map)[4];
+	if (pos / 4 == 3 && views[pos % 4] == y_visible_num(map, pos, 1)
+			&& views[pos % 4 + 4] == y_visible_num(map, pos, -1))
+		return (0);
+	if (pos % 4 == 3 && views[pos / 4 + 8] == x_visible_num(map, pos, 1)
+            && views[pos / 4 + 12] == x_visible_num(map, pos, -1))
+		return (0);
+	return (1);
+}
+
+int		create_map(char (*map)[4], int *views, int pos)
+{
 	char el;
 
-	temp_map = malloc(sizeof(char) * 4 * 4);
-	map_copy(map, temp_map);
 	el = '0';
 	while (el < '4')
 	{
 		el++; 
-		temp_map[pos / 4][pos % 4] = el;
-//		if (same_num(temp_map, pos) && visible_num(temp_map, views, pos))
-//		{
+		map[pos / 4][pos % 4] = el;
+		if (same_num(map, pos, el) && view_cmp(map, views, pos))
+		{
 			pos++;
 			if (pos == 16)
-			{
-				return (temp_map);
-			}
-			create_map(temp_map, views, pos);
-//		}
+				return (1);
+			create_map(map, views, pos);
+		}
 	}
-	free(temp_map);
 	return (0);
 }

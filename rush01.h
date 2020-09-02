@@ -6,7 +6,7 @@
 /*   By: yshimada <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/28 11:26:43 by yshimada          #+#    #+#             */
-/*   Updated: 2020/09/02 11:28:25 by yshimada         ###   ########.fr       */
+/*   Updated: 2020/09/02 13:05:14 by yshimada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,6 @@
 # include <stdlib.h>
 
 void	solve(int *views);
-char	**create_map(char (*map)[4], int *views, int pos);
+int		create_map(char (*map)[4], int *views, int pos);
 
 #endif
