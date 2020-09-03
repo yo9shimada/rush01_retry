@@ -6,7 +6,7 @@
 /*   By: yshimada <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 09:56:00 by yshimada          #+#    #+#             */
-/*   Updated: 2020/09/03 10:54:14 by yshimada         ###   ########.fr       */
+/*   Updated: 2020/09/03 15:03:48 by yshimada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ int		same_num(char (*map)[4], int pos, int el)
 	i = 0;
 	while (i < 4)
 	{
-		if (map[pos / 4][i] == el && i != pos % 4)
+		if (map[pos / 4][i] == el)
 			return (0);
-		if (map[i][pos % 4] == el && i != pos / 4)
+		if (map[i][pos % 4] == el)
 			return (0);
 		i++;
 	}
@@ -46,7 +46,6 @@ int		y_visible_num(char (*map)[4], int pos, int dir)
 		}
 		i += dir;
 	}
-	printf("y:%d", cnt);
 	return (cnt);
 }
 
@@ -68,7 +67,6 @@ int		x_visible_num(char (*map)[4], int pos, int dir)
 		}
 		i += dir;
 	}
-	printf("x:%d", cnt);
 	return (cnt);
 }
 
@@ -83,23 +81,31 @@ int		view_cmp(char (*map)[4], int *views, int pos)
 	return (1);
 }
 
-int		create_map(char (*map)[4], int *views, int pos)
+int		create_map(char (*map)[4], int *views, int pos, char el)
 {
-	char el;
+	char (*temp_map)[4];
+	int i;
 
-	el = '0';
-	while (el < '4')
+	i = 0;
+	temp_map = malloc(sizeof(char) * 4 * 4);
+	map_copy(map, temp_map);
+	while (i++ < 4)
 	{
-		el++;
-		map[pos / 4][pos % 4] = el;
-		if (same_num(map, pos, el) && view_cmp(map, views, pos))
+		temp_map[pos / 4][pos % 4] = el;
+		if (same_num(map, pos, el) && view_cmp(temp_map, views, pos))
 		{
 			pos++;
 			if (pos == 16)
-				return (1);
-			create_map(map, views, pos);
+			{
+				show(temp_map);
+				break;
+			}
+			el = (el + 1) % 4 + '0';
+			create_map(temp_map, views, pos, el);
 		}
-		show(map);
+		/**/show(temp_map);
+		/**/write(1, "\n", 1); 
 	}
+	free(temp_map);
 	return (0);
 }
