@@ -6,7 +6,7 @@
 /*   By: yshimada <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 09:56:00 by yshimada          #+#    #+#             */
-/*   Updated: 2020/09/02 15:27:17 by yshimada         ###   ########.fr       */
+/*   Updated: 2020/09/03 10:54:14 by yshimada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,64 @@ int		same_num(char (*map)[4], int pos, int el)
 	{
 		if (map[pos / 4][i] == el && i != pos % 4)
 			return (0);
+		if (map[i][pos % 4] == el && i != pos / 4)
+			return (0);
 		i++;
 	}
 	return (1);
 }
 
-int		y_visible_num(views, pos, 1)
+int		y_visible_num(char (*map)[4], int pos, int dir)
+{
+	int		i;
+	int		cnt;
+	char	box_height;
+
+	i = (dir == 1 ? 0 : 3);
+	cnt = 0;
+	box_height = '0';
+	while (0 <= i && i <= 3)
+	{
+		if (box_height < map[i][pos % 4])
+		{
+			box_height = map[i][pos % 4];
+			cnt++;
+		}
+		i += dir;
+	}
+	printf("y:%d", cnt);
+	return (cnt);
+}
+
+int		x_visible_num(char (*map)[4], int pos, int dir)
+{
+	int		i;
+	int		cnt;
+	char	box_height;
+
+	i = (dir == 1 ? 0 : 3);
+	cnt = 0;
+	box_height = '0';
+	while (0 <= i && i <= 3)
+	{
+		if (box_height < map[pos / 4][i])
+		{
+			box_height = map[pos / 4][i];
+			cnt++;
+		}
+		i += dir;
+	}
+	printf("x:%d", cnt);
+	return (cnt);
+}
 
 int		view_cmp(char (*map)[4], int *views, int pos)
 {
-	if (pos / 4 == 3 && views[pos % 4] == y_visible_num(map, pos, 1)
-			&& views[pos % 4 + 4] == y_visible_num(map, pos, -1))
+	if (pos / 4 == 3 && views[pos % 4] != y_visible_num(map, pos, 1)
+			&& views[pos % 4 + 4] != y_visible_num(map, pos, -1))
 		return (0);
-	if (pos % 4 == 3 && views[pos / 4 + 8] == x_visible_num(map, pos, 1)
-            && views[pos / 4 + 12] == x_visible_num(map, pos, -1))
+	if (pos % 4 == 3 && views[pos / 4 + 8] != x_visible_num(map, pos, 1)
+			&& views[pos / 4 + 12] != x_visible_num(map, pos, -1))
 		return (0);
 	return (1);
 }
@@ -46,7 +90,7 @@ int		create_map(char (*map)[4], int *views, int pos)
 	el = '0';
 	while (el < '4')
 	{
-		el++; 
+		el++;
 		map[pos / 4][pos % 4] = el;
 		if (same_num(map, pos, el) && view_cmp(map, views, pos))
 		{
@@ -55,6 +99,7 @@ int		create_map(char (*map)[4], int *views, int pos)
 				return (1);
 			create_map(map, views, pos);
 		}
+		show(map);
 	}
 	return (0);
 }
