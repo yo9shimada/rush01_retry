@@ -6,7 +6,7 @@
 /*   By: yshimada <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 09:56:00 by yshimada          #+#    #+#             */
-/*   Updated: 2020/09/04 11:07:26 by yshimada         ###   ########.fr       */
+/*   Updated: 2020/09/07 16:33:53 by yshimada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,18 +91,19 @@ int		create_map(char (*map)[4], int *views, int pos, char el)
 	map_copy(map, temp_map);
 	while (i++ < 4)
 	{
-		temp_map[pos / 4][pos % 4] = el;
-		if (same_num(map, pos, el) && view_cmp(temp_map, views, pos))
+		if (same_num(temp_map, pos, el) && view_cmp(temp_map, views, pos))
 		{
+			temp_map[pos / 4][pos % 4] = el;
 			pos++;
 			if (pos == 16)
 			{
-				show(temp_map);
+				//show(temp_map);
 				break;
 			}
-			el = (el + 1) % 4 + '0';
 			create_map(temp_map, views, pos, el);
 		}
+		else
+			el = el % 4 + '1';
 		/**/show(temp_map);
 		/**/write(1, "\n", 1); 
 	}
