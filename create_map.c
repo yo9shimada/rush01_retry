@@ -6,13 +6,13 @@
 /*   By: yshimada <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 09:56:00 by yshimada          #+#    #+#             */
-/*   Updated: 2020/09/07 16:33:53 by yshimada         ###   ########.fr       */
+/*   Updated: 2020/09/09 13:40:09 by yshimada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rush01.h"
 
-int		same_num(char (*map)[4], int pos, int el)
+int		same_num(char (*map)[4], int pos, char el)
 {
 	int i;
 
@@ -72,40 +72,41 @@ int		x_visible_num(char (*map)[4], int pos, int dir)
 
 int		view_cmp(char (*map)[4], int *views, int pos)
 {
-	if (pos / 4 == 3 && views[pos % 4] != y_visible_num(map, pos, 1)
-			&& views[pos % 4 + 4] != y_visible_num(map, pos, -1))
+	if (pos / 4 == 3 && !(views[pos % 4] == y_visible_num(map, pos, 1)
+			&& views[pos % 4 + 4] == y_visible_num(map, pos, -1)))
 		return (0);
-	if (pos % 4 == 3 && views[pos / 4 + 8] != x_visible_num(map, pos, 1)
-			&& views[pos / 4 + 12] != x_visible_num(map, pos, -1))
+	if (pos % 4 == 3 && !(views[pos / 4 + 8] == x_visible_num(map, pos, 1)
+			&& views[pos / 4 + 12] == x_visible_num(map, pos, -1)))
+	{
 		return (0);
+	}
 	return (1);
 }
 
-int		create_map(char (*map)[4], int *views, int pos, char el)
+int		create_map(char (*map)[4], int *views, int pos, int *solve_flag)
 {
-	char (*temp_map)[4];
-	int i;
+	char	(*temp_map)[4];
+	int		i;
 
 	i = 0;
 	temp_map = malloc(sizeof(char) * 4 * 4);
 	map_copy(map, temp_map);
-	while (i++ < 4)
+	pos++;
+	if (pos == 16)
 	{
-		if (same_num(temp_map, pos, el) && view_cmp(temp_map, views, pos))
+		show(temp_map);
+		*solve_flag = 1;
+		return (1);
+	}
+	while (++i <= 4)
+	{
+		if (*solve_flag == 1)
+			return (1);
+		if (same_num(map, pos, '0' + i) && view_cmp(temp_map, views, pos))
 		{
-			temp_map[pos / 4][pos % 4] = el;
-			pos++;
-			if (pos == 16)
-			{
-				//show(temp_map);
-				break;
-			}
-			create_map(temp_map, views, pos, el);
+			temp_map[pos / 4][pos % 4] = '0' + i;
+			create_map(temp_map, views, pos, solve_flag);
 		}
-		else
-			el = el % 4 + '1';
-		/**/show(temp_map);
-		/**/write(1, "\n", 1); 
 	}
 	free(temp_map);
 	return (0);

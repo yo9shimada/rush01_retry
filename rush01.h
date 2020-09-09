@@ -6,12 +6,11 @@
 /*   By: yshimada <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/28 11:26:43 by yshimada          #+#    #+#             */
-/*   Updated: 2020/09/03 13:27:15 by yshimada         ###   ########.fr       */
+/*   Updated: 2020/09/09 13:32:38 by yshimada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RUSH01_H
-
 # define RUSH01_H
 
 # include <unistd.h>
@@ -19,7 +18,7 @@
 # include <stdio.h>
 
 void	solve(int *views);
-int		create_map(char (*map)[4], int *views, int pos, char el);
+int		create_map(char (*map)[4], int *views, int pos, int *solve_flag);
 void	map_copy(char (*map)[4], char (*temp_map)[4]);
 void	show(char (*map)[4]);
 
