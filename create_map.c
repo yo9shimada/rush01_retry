@@ -6,7 +6,7 @@
 /*   By: yshimada <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 09:56:00 by yshimada          #+#    #+#             */
-/*   Updated: 2020/09/09 13:40:09 by yshimada         ###   ########.fr       */
+/*   Updated: 2020/09/10 10:34:07 by yshimada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,7 @@ int		view_cmp(char (*map)[4], int *views, int pos)
 		return (0);
 	if (pos % 4 == 3 && !(views[pos / 4 + 8] == x_visible_num(map, pos, 1)
 			&& views[pos / 4 + 12] == x_visible_num(map, pos, -1)))
-	{
 		return (0);
-	}
 	return (1);
 }
 
@@ -102,11 +100,9 @@ int		create_map(char (*map)[4], int *views, int pos, int *solve_flag)
 	{
 		if (*solve_flag == 1)
 			return (1);
+		temp_map[pos / 4][pos % 4] = '0' + i;
 		if (same_num(map, pos, '0' + i) && view_cmp(temp_map, views, pos))
-		{
-			temp_map[pos / 4][pos % 4] = '0' + i;
 			create_map(temp_map, views, pos, solve_flag);
-		}
 	}
 	free(temp_map);
 	return (0);
